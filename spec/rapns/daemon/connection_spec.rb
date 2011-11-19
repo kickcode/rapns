@@ -237,7 +237,7 @@ describe Rapns::Daemon::Connection, "when receiving an error packet" do
     @notification = Rapns::Notification.create!(:device_token => "a" * 64)
     @notification.stub(:save!)
     @connection = Rapns::Daemon::Connection.new("Connection 1")
-    @ssl_socket = mock("SSLSocket", :write => nil, :flush => nil, :close => nil, :read => [8, 4, @notification.id].pack("ccN"))
+    @ssl_socket = mock("SSLSocket", :write => nil, :flush => nil, :close => nil, :read => [8, 4, @notification.id.to_s.to_i].pack("ccN"))
     @connection.stub(:setup_ssl_context)
     @connection.stub(:connect_socket).and_return([@tcp_socket, @ssl_socket])
     IO.stub(:select).and_return([@ssl_socket, [], []])

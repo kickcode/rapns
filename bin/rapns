@@ -23,6 +23,5 @@ end
 ENV['RAILS_ENV'] = environment
 load 'config/environment.rb'
 
-require 'rapns/patches'
-
+Mongoid.load!("./config/mongoid.yml")
 Rapns::Daemon.start(environment, foreground)

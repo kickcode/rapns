@@ -12,9 +12,15 @@ module Rapns
         log(:info, msg)
       end
 
-      def error(msg, options = {})
-        airbrake_notify(msg) if notify_via_airbrake?(msg, options)
-        log(:error, msg, 'ERROR')
+      def error(err, options = {})
+        airbrake_notify(err) if notify_via_airbrake?(err, options)
+        if err.class.ancestors.include?(Exception)
+          msg = "#{err.message}"
+          msg += "\n#{er.backtrace.join("\n")}" unless err.backtrace.blank?
+        else
+          msg = err
+        end
+        log(:error, err, 'ERROR')
       end
 
       def warn(msg)
