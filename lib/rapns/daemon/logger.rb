@@ -16,7 +16,7 @@ module Rapns
         airbrake_notify(err) if notify_via_airbrake?(err, options)
         if err.class.ancestors.include?(Exception)
           msg = "#{err.message}"
-          msg += "\n#{er.backtrace.join("\n")}" unless err.backtrace.blank?
+          msg += "\n#{err.backtrace.join("\n")}" unless err.backtrace.blank?
         else
           msg = err
         end
