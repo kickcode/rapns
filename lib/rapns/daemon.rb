@@ -1,6 +1,7 @@
 require 'thread'
 require 'socket'
 require 'pathname'
+require 'fileutils'
 
 require 'rapns/daemon/configuration'
 require 'rapns/daemon/certificate'
@@ -91,6 +92,8 @@ module Rapns
 
     def self.write_pid_file
       if !configuration.pid_file.blank?
+        FileUtils.mkdir_p(File.dirname(configuration.pid_file))
+
         File.open(configuration.pid_file, 'w') do |f|
           f.puts $$
         end
