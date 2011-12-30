@@ -48,13 +48,13 @@ describe Rapns::Daemon::DeliveryHandler do
   end
 
   it "should not trigger validations when saving the notification" do
-    @notification.should_receive(:save!).with(:validate => false)
+    @notification.should_receive(:save).with(:validate => false)
     @delivery_handler.send(:handle_next_notification)
   end
 
   it "should log if an error is raised when updating the notification" do
     e = StandardError.new("bork!")
-    @notification.stub(:save!).and_raise(e)
+    @notification.stub(:save).and_raise(e)
     Rapns::Daemon.logger.should_receive(:error).with(e)
     @delivery_handler.send(:handle_next_notification)
   end

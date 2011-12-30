@@ -1,26 +1,27 @@
 module Rapns
   class Notification
-    include Mongoid::Document
-    include Mongoid::Timestamps
+    include MongoMapper::Document    
 
-    field :badge, type: Integer
-    field :device_token, type: String, limit: 64
-    field :sound, type: String, default: "1.aiff"
-    field :alert, type: String
-    field :attributes_for_device, type: String
-    field :expiry, type: Integer, default: 1.day.to_i
-    field :delivered, type: Boolean, default: false
-    field :delivered_at, type: Time
-    field :failed, type: Boolean, default: false
-    field :failed_at, type: Time
-    field :error_code, type: Integer
-    field :error_description, type: String
-    field :deliver_after, type: Time
+    key :badge, Integer
+    key :device_token, String, limit: 64
+    key :sound, String, default: "1.aiff"
+    key :alert, String
+    key :attributes_for_device, String
+    key :expiry, Integer, default: 1.day.to_i
+    key :delivered, Boolean, default: false
+    key :delivered_at, Time
+    key :failed, Boolean, default: false
+    key :failed_at, Time
+    key :error_code, Integer
+    key :error_description, String
+    key :deliver_after, Time
 
+    timestamps!    
+    
     validates :device_token, :presence => true, :format => { :with => /^[a-z0-9]{64}$/ }
     validates :badge, :numericality => true, :allow_nil => true
     validates :expiry, :numericality => true, :presence => true
-    scope :ready_for_delivery, lambda { where(:delivered => false, :failed => false).any_of({:deliver_after => nil}, {:deliver_after.lt => Time.now}) }
+    scope :ready_for_delivery, lambda { where(:delivered => false, :failed => false).where(:$or => [{:deliver_after => nil}, {:deliver_after => {:$lt => Time.now}}]) }
 
     validates_with Rapns::BinaryNotificationValidator
 

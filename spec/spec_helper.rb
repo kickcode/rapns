@@ -15,8 +15,8 @@ require 'rapns/daemon'
 
 Spec::Runner.configure do |config|
   config.before(:all) do
-    Mongoid.configure do |config|
-      config.master = Mongo::Connection.new.db("rapns-test")
-    end
+    MongoMapper.config = {"test" => {"uri" => "mongodb://localhost/rapns-test"}}
+    MongoMapper.connect("test")
+    Rapns::Notification.destroy_all
   end
 end

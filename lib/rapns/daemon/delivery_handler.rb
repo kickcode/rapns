@@ -25,7 +25,7 @@ module Rapns
 
             notification.delivered = true
             notification.delivered_at = Time.now
-            notification.save!(:validate => false)
+            notification.save(:validate => false)
 
             Rapns::Daemon.logger.info("Notification #{notification.id} delivered to #{notification.device_token}")
           rescue Rapns::DeliveryError => error

@@ -1,9 +1,11 @@
 require "spec_helper"
 
 describe Rapns::Notification do
-  it { should validate_presence_of(:device_token) }
-  it { should validate_numericality_of(:badge) }
-  it { should validate_numericality_of(:expiry) }
+  it "should validate presence of the device_token" do
+    notification = Rapns::Notification.new(:device_token => nil)
+    notification.valid?.should be_false
+    notification.errors[:device_token].include?("can't be blank").should be_true
+  end
 
   it "should validate the format of the device_token" do
     notification = Rapns::Notification.new(:device_token => "{$%^&*()}")
